@@ -1,50 +1,53 @@
 # Magic: The Gathering Search Engine
 
-The Magic: The Gathering Search Engine is a web application for searching and filtering Magic: The Gathering (MTG) cards. It is built with Laravel, Vue.js, and Tailwind CSS, and provides a fast, responsive, and intuitive interface using local JSON data.
+The Magic: The Gathering Search Engine is a web application for searching and filtering Magic: The Gathering (MTG) cards with pricing data from the Cardmarket API. Built with Laravel, Vue.js, and Tailwind CSS, the application imports card data from a JSON URL into a database to provide a fast and intuitive user experience.
 
-## Features
+## Key Features
 
-- **Card Search**: Search for cards by name, type, set, or rarity.
-- **Advanced Filters**: Filter by color, mana cost, keywords, and more.
-- **Responsive Design**: Optimized for desktop, tablet, and mobile devices.
-- **Local Data**: Loads MTG card data from a local JSON file.
-- **Dynamic UI**: Built as a single-page application with Vue.js.
-- **Favorites (Optional)**: Logged-in users can save their favorite cards.
+- **Card Search**: Search for cards by name, set, rarity, or other attributes.
+- **Advanced Filters**: Refine results by color, mana cost, keywords, and more.
+- **Pricing**: Fetches real-time prices from the Cardmarket API for exact card matches.
+- **Responsive Design**: Optimized for use on desktop, tablet, and mobile devices.
+- **Dynamic UI**: Vue.js enables a smooth, single-page application experience.
+- **Favorites (Optional)**: Logged-in users can save cards to their favorites.
 
-> **Note**: This project uses a local JSON file for card data, ensuring offline access and high performance.
+> **Note**: Card data is imported from a remote JSON file and stored in a database. Prices are retrieved via the Cardmarket API for exact matches.
 
 ## Tech Stack
 
-- **Backend**: Laravel (API and server-side logic)
-- **Frontend**: Vue.js (component-based UI)
-- **Styling**: Tailwind CSS (utility-first CSS framework)
-- **Database**: MySQL or PostgreSQL (optional, used for storing favorites)
-- **Data Source**: Local JSON file
+- **Backend**: Laravel (API, database operations, Cardmarket integration)
+- **Frontend**: Vue.js (reactive UI, components)
+- **Styling**: Tailwind CSS (responsive, utility-first design)
+- **Database**: MySQL or PostgreSQL (for storing card data)
+- **Data Source**: JSON file fetched from a URL
+- **External API**: Cardmarket API (for card pricing)
 
 ## Usage
 
-1. Use the search bar to look for cards by name or attribute.
-2. Apply filters such as set, color, or mana cost using dropdown menus.
-3. Browse through a responsive, MTG-themed interface styled with Tailwind CSS.
+1. **Search**: Enter a card name or keyword into the search bar.
+2. **Filters**: Narrow results using dropdowns for set, color, or mana cost.
+3. **Pricing**: View current Cardmarket prices for matched cards.
+4. **Interface**: Navigate through a clean, responsive UI styled for MTG.
 
 ## Development
 
 - **Backend**:
   - Laravel manages API routes such as `/api/cards`.
-  - Parses and serves data from the local JSON file.
-  - You can cache parsed JSON using Redis to improve performance.
+  - Imports and parses card data from a JSON URL.
+  - Queries the Cardmarket API for pricing information.
+  - Use Redis to cache database queries and API responses for improved performance.
 
 - **Frontend**:
   - Vue components are located in `resources/js/components/`.
-  - Vue Router is used to create a seamless single-page experience.
+  - Vue Router handles navigation within the single-page app.
 
 - **Styling**:
   - Tailwind CSS is configured in `resources/css/app.css`.
-  - MTG-themed color schemes (e.g., blue, red, green) can be customized there.
+  - Customize with MTG-themed colors (e.g., blue, red, green) as needed.
+
+> **Tip**: For better performance, cache expensive operations such as database lookups and API calls using Redis.
 
 ## Contributing
 
-To contribute:
-
-1. Fork the repository at [https://github.com/sallarrabiei/MTGplayer](https://github.com/sallarrabiei/MTGplayer).
+1. Fork the repository: [https://github.com/sallarrabiei/MTGplayer](https://github.com/sallarrabiei/MTGplayer)
 2. Create a new branch:
