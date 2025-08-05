@@ -1,53 +1,332 @@
-# Magic: The Gathering Search Engine
+# Magic: The Gathering Search Engine 🃏
 
-The Magic: The Gathering Search Engine is a web application for searching and filtering Magic: The Gathering (MTG) cards with pricing data from the Cardmarket API. Built with Laravel, Vue.js, and Tailwind CSS, the application imports card data from a JSON URL into a database to provide a fast and intuitive user experience.
+A comprehensive web application for searching and filtering Magic: The Gathering (MTG) cards with real-time pricing data from the Cardmarket API. Built with Laravel, Vue.js, and Tailwind CSS for a fast, intuitive, and responsive user experience.
 
-## Key Features
+[![Laravel](https://img.shields.io/badge/Laravel-10.x-red.svg)](https://laravel.com)
+[![Vue.js](https://img.shields.io/badge/Vue.js-3.x-green.svg)](https://vuejs.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.x-blue.svg)](https://tailwindcss.com)
 
-- **Card Search**: Search for cards by name, set, rarity, or other attributes.
-- **Advanced Filters**: Refine results by color, mana cost, keywords, and more.
-- **Pricing**: Fetches real-time prices from the Cardmarket API for exact card matches.
-- **Responsive Design**: Optimized for use on desktop, tablet, and mobile devices.
-- **Dynamic UI**: Vue.js enables a smooth, single-page application experience.
-- **Favorites (Optional)**: Logged-in users can save cards to their favorites.
+## ✨ Key Features
 
-> **Note**: Card data is imported from a remote JSON file and stored in a database. Prices are retrieved via the Cardmarket API for exact matches.
+- **🔍 Advanced Search**: Search cards by name, set, rarity, colors, mana cost, and type
+- **📊 Real-time Pricing**: Fetches current prices from the Cardmarket API for exact matches
+- **🎨 Beautiful UI**: Modern, responsive design optimized for all devices
+- **⚡ Fast Performance**: Redis caching for database queries and API responses
+- **❤️ Favorites System**: Save and manage your favorite cards (with authentication)
+- **📈 Statistics Dashboard**: Comprehensive insights into the card database
+- **🎯 Smart Filtering**: Advanced filters with debounced search and pagination
 
-## Tech Stack
+## 🛠 Tech Stack
 
-- **Backend**: Laravel (API, database operations, Cardmarket integration)
-- **Frontend**: Vue.js (reactive UI, components)
-- **Styling**: Tailwind CSS (responsive, utility-first design)
-- **Database**: MySQL or PostgreSQL (for storing card data)
-- **Data Source**: JSON file fetched from a URL
-- **External API**: Cardmarket API (for card pricing)
+### Backend
+- **Laravel 10.x** - RESTful API and backend logic
+- **MySQL/PostgreSQL** - Primary database for card storage
+- **Redis** - Caching layer for performance optimization
+- **Cardmarket API** - External pricing data integration
 
-## Usage
+### Frontend
+- **Vue.js 3** - Reactive single-page application
+- **Vue Router 4** - Client-side routing
+- **Pinia** - State management
+- **Tailwind CSS 3** - Utility-first styling framework
 
-1. **Search**: Enter a card name or keyword into the search bar.
-2. **Filters**: Narrow results using dropdowns for set, color, or mana cost.
-3. **Pricing**: View current Cardmarket prices for matched cards.
-4. **Interface**: Navigate through a clean, responsive UI styled for MTG.
+### Build Tools
+- **Vite** - Fast build tool and development server
+- **Laravel Mix** - Asset compilation
 
-## Development
+## 🚀 Quick Start
 
-- **Backend**:
-  - Laravel manages API routes such as `/api/cards`.
-  - Imports and parses card data from a JSON URL.
-  - Queries the Cardmarket API for pricing information.
-  - Use Redis to cache database queries and API responses for improved performance.
+### Prerequisites
+- PHP 8.1+
+- Node.js 16+
+- Composer
+- MySQL/PostgreSQL
+- Redis (optional, for caching)
 
-- **Frontend**:
-  - Vue components are located in `resources/js/components/`.
-  - Vue Router handles navigation within the single-page app.
+### Installation
 
-- **Styling**:
-  - Tailwind CSS is configured in `resources/css/app.css`.
-  - Customize with MTG-themed colors (e.g., blue, red, green) as needed.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/sallarrabiei/MTGplayer.git
+   cd MTGplayer
+   ```
 
-> **Tip**: For better performance, cache expensive operations such as database lookups and API calls using Redis.
+2. **Install PHP dependencies**
+   ```bash
+   composer install
+   ```
 
-## Contributing
+3. **Install Node.js dependencies**
+   ```bash
+   npm install
+   ```
 
-1. Fork the repository: [https://github.com/sallarrabiei/MTGplayer](https://github.com/sallarrabiei/MTGplayer)
-2. Create a new branch:
+4. **Environment setup**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+5. **Configure your `.env` file**
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=mtgplayer
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
+
+   CACHE_DRIVER=redis
+   REDIS_HOST=127.0.0.1
+   REDIS_PORT=6379
+
+   # MTG Data Source
+   MTG_CARDS_JSON_URL=https://mtgjson.com/api/v5/AllCards.json
+
+   # Cardmarket API (optional)
+   CARDMARKET_APP_TOKEN=your_app_token
+   CARDMARKET_APP_SECRET=your_app_secret
+   CARDMARKET_ACCESS_TOKEN=your_access_token
+   CARDMARKET_ACCESS_SECRET=your_access_secret
+   ```
+
+6. **Database setup**
+   ```bash
+   php artisan migrate
+   ```
+
+7. **Import card data**
+   ```bash
+   php artisan mtg:import-cards
+   ```
+
+8. **Build frontend assets**
+   ```bash
+   npm run build
+   # or for development
+   npm run dev
+   ```
+
+9. **Start the development server**
+   ```bash
+   php artisan serve
+   ```
+
+Visit `http://localhost:8000` to see the application!
+
+## 📖 API Documentation
+
+### Card Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/cards` | Search and filter cards |
+| `GET` | `/api/cards/{id}` | Get specific card details |
+| `GET` | `/api/cards/{id}/price` | Get card pricing from Cardmarket |
+| `GET` | `/api/cards/sets` | Get all available sets |
+| `GET` | `/api/cards/stats` | Get database statistics |
+
+### Search Parameters
+
+- `name` - Search by card name (partial match)
+- `set` - Filter by set code
+- `rarity` - Filter by rarity (common, uncommon, rare, mythic)
+- `colors` - Filter by colors (array: W, U, B, R, G)
+- `cmc` - Filter by converted mana cost
+- `type` - Filter by card type
+- `page` - Pagination page number
+- `per_page` - Results per page (max 100)
+
+### Example Requests
+
+```bash
+# Search for Lightning cards
+GET /api/cards?name=Lightning
+
+# Get rare cards from Zendikar Rising
+GET /api/cards?set=ZNR&rarity=rare
+
+# Find red and green cards with CMC 3
+GET /api/cards?colors[]=R&colors[]=G&cmc=3
+```
+
+## 🎯 Usage Guide
+
+### Importing Card Data
+
+The application includes a powerful import command to fetch and process MTG card data:
+
+```bash
+# Import with default settings
+php artisan mtg:import-cards
+
+# Import from custom URL
+php artisan mtg:import-cards --url=https://custom-url.com/cards.json
+
+# Import with custom batch size
+php artisan mtg:import-cards --batch-size=1000
+
+# Force import without confirmation
+php artisan mtg:import-cards --force
+```
+
+### Cardmarket API Integration
+
+To enable real-time pricing, configure your Cardmarket API credentials:
+
+1. Register at [Cardmarket Developer Portal](https://www.cardmarket.com/en/Magic/API)
+2. Create a new application
+3. Add your credentials to `.env`
+4. Pricing will automatically appear on card details and search results
+
+### Caching Configuration
+
+The application uses multi-layer caching for optimal performance:
+
+- **Database queries**: 5-30 minutes
+- **API responses**: 30 minutes
+- **Card statistics**: 30 minutes
+- **Set data**: 1 hour
+
+Configure cache durations in `config/mtg.php`.
+
+## 🧪 Testing
+
+Run the test suite to ensure everything works correctly:
+
+```bash
+# Run all tests
+php artisan test
+
+# Run specific test types
+php artisan test --testsuite=Feature
+php artisan test --testsuite=Unit
+
+# Run with coverage
+php artisan test --coverage
+```
+
+## 🎨 Customization
+
+### MTG-Themed Colors
+
+The application includes custom Tailwind CSS classes for MTG colors:
+
+```css
+.mana-white    /* White mana */
+.mana-blue     /* Blue mana */
+.mana-black    /* Black mana */
+.mana-red      /* Red mana */
+.mana-green    /* Green mana */
+
+.rarity-common    /* Common rarity */
+.rarity-uncommon  /* Uncommon rarity */
+.rarity-rare      /* Rare rarity */
+.rarity-mythic    /* Mythic rare rarity */
+```
+
+### Component Structure
+
+```
+resources/js/
+├── components/
+│   ├── CardComponent.vue     # Individual card display
+│   └── ManaCost.vue         # Mana cost symbols
+├── views/
+│   ├── Home.vue             # Main search page
+│   ├── CardDetail.vue       # Card details page
+│   ├── Favorites.vue        # User favorites
+│   └── Statistics.vue       # Database statistics
+├── stores/
+│   ├── app.js              # Global app state
+│   └── cards.js            # Card-related state
+└── router/
+    └── index.js            # Vue Router configuration
+```
+
+## 🚀 Deployment
+
+### Production Build
+
+```bash
+# Optimize for production
+composer install --optimize-autoloader --no-dev
+npm run build
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+### Environment Variables
+
+Ensure these are set in production:
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+CACHE_DRIVER=redis
+SESSION_DRIVER=redis
+QUEUE_CONNECTION=redis
+```
+
+### Recommended Hosting
+
+- **Vercel** - For frontend deployment
+- **Heroku** - Full-stack deployment
+- **AWS** - Scalable cloud deployment
+- **DigitalOcean** - VPS deployment
+
+## 🤝 Contributing
+
+We welcome contributions! Please follow these steps:
+
+1. **Fork the repository**
+2. **Create a feature branch**
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+3. **Make your changes**
+4. **Add tests** for new functionality
+5. **Run the test suite**
+   ```bash
+   php artisan test
+   npm run test
+   ```
+6. **Commit your changes**
+   ```bash
+   git commit -m 'Add amazing feature'
+   ```
+7. **Push to your branch**
+   ```bash
+   git push origin feature/amazing-feature
+   ```
+8. **Open a Pull Request**
+
+### Code Style
+
+- Follow PSR-12 for PHP code
+- Use Laravel Pint for code formatting: `./vendor/bin/pint`
+- Follow Vue.js style guide for frontend code
+- Use meaningful commit messages
+
+## 📄 License
+
+This project is open-sourced software licensed under the [MIT license](LICENSE).
+
+## 🙏 Acknowledgments
+
+- **[MTGJSON](https://mtgjson.com)** - Comprehensive MTG card data
+- **[Cardmarket](https://www.cardmarket.com)** - Real-time pricing data
+- **[Laravel](https://laravel.com)** - Elegant PHP framework
+- **[Vue.js](https://vuejs.org)** - Progressive JavaScript framework
+- **[Tailwind CSS](https://tailwindcss.com)** - Utility-first CSS framework
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/sallarrabiei/MTGplayer/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/sallarrabiei/MTGplayer/discussions)
+- **Documentation**: [Wiki](https://github.com/sallarrabiei/MTGplayer/wiki)
+
+---
+
+**Built with ❤️ for the Magic: The Gathering community**
